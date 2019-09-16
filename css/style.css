@@ -4,13 +4,18 @@ body {
   }
   
   .game-intro {
+    position: fixed;
+    z-index: 1;
     float: middle;
     padding: 0% 10%;
+    left: calc(50% - 350px);
   }
   
   .game-intro p {
+      
     font-size: 18px;
     font-family: "Verdana"
+    
   }
   
   .logo-img {
@@ -33,6 +38,19 @@ body {
   }
   
   #game-board {
-      float: middle;
+    position: absolute;
+    float: middle;
+    text-align: center;
+    left: calc(50% - 350px);
   }
-  
+  canvas {
+    
+     float: middle;
+  }
+  #myVideo {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+  }

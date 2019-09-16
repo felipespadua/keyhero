@@ -19,31 +19,36 @@ window.onload = function () {
     const keys = [];
     const keysPos = [{x: 245, y: 50},{x: 295, y: 50}, {x:340, y:50},{x:385, y: 50},{x:435, y:50}];
     const patterns = [{ x: -0.65, y: 2},{x:-0.37, y:2},{x:-0.07, y:2},{x:0.24, y:2},{x:0.54, y:2}];
+    const imgGuitar = new Image();
+    const imgFire = new Image();
+    const keyZone = { yInicio: 590, yFinal: 680};    
+    
     function drawGuitar() {
-        var img = new Image();
-        img.onload = function () {
-            gameControl.ctx.drawImage(img, 0, 0, gameControl.canvas.width, gameControl.canvas.height);
+        imgGuitar.src = "./img/guitar3.png";
+        // imgGuitar.onload = function ()     {
+            gameControl.ctx.drawImage(imgGuitar, 0, 0, gameControl.canvas.width, gameControl.canvas.height);
             updateKeys();
+            
             // gameControl.ctx.fillStyle = "red";
-            // gameControl.ctx.fillRect(245, 50, 25, 25);
+            // gameControl.ctx.fillRect(35, 635, 635, 25);
             // gameControl.ctx.fillStyle = "blue";
-            // gameControl.ctx.fillRect(295, 50, 25, 25);
+            // gameControl.ctx.fillRect(70, 635, 25, 25);
             // gameControl.ctx.fillStyle = "black";
             // gameControl.ctx.fillRect(340, 50, 25, 25);
             // gameControl.ctx.fillStyle = "blue";
             // gameControl.ctx.fillRect(385, 50, 25, 25);
             // gameControl.ctx.fillStyle = "red";
             // gameControl.ctx.fillRect(430, 50, 25, 25);
-        }
-        img.src = "./img/guitar3.png";
+        // }
+       
     }
 
     function startGame() {
         gameControl.start();
         drawGuitar();
        
-
-        this.interval = setInterval(updateBoard, 50);
+        updateBoard();
+        // this.interval = setInterval(updateBoard, 1000/60);
 
     }
 
@@ -61,6 +66,7 @@ window.onload = function () {
             for (let i = 0; i < keys.length ; i+=1) {
                 keys[i].moveKey();
                 keys[i].drawKey();
+                if(keys[i].posY > keyZone.yFinal) keys.splice(i,1); //remove a chave do array se ja passou da keyZone
                 // keys[1].moveKey(patterns[1]);
                 // keys[1].drawKey();
                 // keys[2].moveKey(patterns[2]);
@@ -74,14 +80,57 @@ window.onload = function () {
        
     }
     function keysFactory(x,y,keyIndex,pattern){
-        return new Key(x,y,gameControl.ctx,"A",pattern);
+        return new Key(x,y,gameControl.ctx,keyIndex,pattern);
     }
 
     function updateBoard() {
         clearBoard();
         drawGuitar();
-       
+        drawButton();
+        requestAnimationFrame(updateBoard) ;
+        
 
+    }
+    function keyOnKeyZone (keyName){
+        let keyFiltered = keys.filter( key => {
+            // console.log("keyPosY",key.posY)
+            // console.log("keyName",keyName)
+            // console.log("key.keyName",key.keyName)
+            // console.log((keyZone.yFinal >= key.posY) && (key.posY >= keyZone.yInicio) && (key.keyName === keyName))
+            return ((keyZone.yFinal >= key.posY) && (key.posY >= keyZone.yInicio) && (key.keyName === keyName))
+        })
+        return keyFiltered;
+    }
+    function drawButton(){
+        let imgButton = new Image();
+        // imgButton.src = "";
+        imgButton.src = "./img/green1.png";
+        gameControl.ctx.drawImage(imgButton, 35, 625, 110, 60);
+        setTimeout( function() {
+           
+            gameControl.ctx.drawImage(imgButton, 35, 625, 110, 60);
+        },1000)
+       
+        
+    }
+    function drawFire(){
+        imgFire.src = "./img/fire2.png";
+        gameControl.ctx.drawImage(imgFire, 70, 635,200, 200);
+       
+        // setTimeout( function (){
+        //     gameControl.ctx.drawImage(imgFire, 70, 635,30, 30);
+        // },1000);
+    }
+    window.onkeydown = function (e){
+        let stringKeyCode = String.fromCharCode(e.keyCode);
+        let keyFiltered = keyOnKeyZone(stringKeyCode);
+        console.log(keyFiltered);
+        if(keyFiltered.length > 0){
+            keyFiltered[0].fireKey();
+            
+        }else{
+            // drawFire();
+        }
     }
 
 }
