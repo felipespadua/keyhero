@@ -5,8 +5,8 @@ class Key {
         this.posX = posX;
         this.posY = posY;
         this.ctx = ctx;
-        this.width = 25;
-        this.height = 25;
+        this.width = 30;
+        this.height = 30;
         this.keyIndex = keyIndex;
         this.pattern = pattern;
         this.keys = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
@@ -28,7 +28,7 @@ class Key {
     moveKey(){
         this.posX += this.pattern.x;
         this.posY += this.pattern.y;
-        this.width += 0.15;
-        this.height += 0.15;
+        this.width += 0.3;
+        this.height += 0.3;
     }
 }

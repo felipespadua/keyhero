@@ -7,6 +7,7 @@ window.onload = function () {
         selectList: document.getElementById("selectList"),
         music:  document.getElementById("main-music"),
         started: false,
+        score: 0,
         checkMusicSelected: function(){
             return document.getElementById("selectList").value != 0;
         },
@@ -37,39 +38,45 @@ window.onload = function () {
         },
         startMusic: function (){    
             this.setMusic();
-            console.log(this.music);
+            this.music.volume = 0.7;
             this.music.play();
         }
-
     };
     let keys = [];
     let flames = [];
     const keysPos = [{x: 245, y: 50},{x: 295, y: 50}, {x:340, y:50},{x:385, y: 50},{x:435, y:50}];
     const buttonPos = [{ x: 22, y: 530}, {x: 156,y: 530}, {x:290, y:530}, { x:420, y:530}, {x:553, y:530}];
-    const patterns = [{ x: -1, y: 3},{x:-0.55, y:3},{x:-0.12, y:3},{x:0.24, y:2},{x:0.54, y:2}];
+    const patterns = [{ x: -1, y: 3},{x:-0.55, y:3},{x:-0.10, y:3},{x:0.40, y:3},{x:0.80, y:3}];
     const imgGuitar = new Image();
-    const keyZone = { yInicio: 590, yFinal: 680};    
+    const imgGuitarScore = new Image();
+    const keyZone = { yInicio: 580, yFinal: 670};    
 
     document.getElementById("start-button").onclick = function () {
         if(gameControl.checkMusicSelected()){
             startGame();
             document.getElementById("start-button").style.visibility = "hidden";
-            document.getElementById("logo-image").style.display = "none";
+            document.getElementById("game-title").style.display = "none";
             document.getElementById("game-intro").style.display = "none";
+            document.getElementById("myVideo").style.display = "block";
         }else{
             document.getElementById("select-alert").style.display = "block";
         }
        
        
     };
-    
- 
+    function drawScore(){
+        imgGuitarScore.src = "./img/guitarScore.svg";
+        gameControl.ctx.drawImage(imgGuitarScore, 530, 65, 200, 150);     
+        gameControl.ctx.font = "30px Nightmare-Hero";
+        gameControl.ctx.fillStyle = "white";
+        gameControl.ctx.fillText(`Score: ${gameControl.score}`, 540,170);
+    } 
     
     function drawGuitar() {
         imgGuitar.src = "./img/guitar3.png";
         gameControl.ctx.drawImage(imgGuitar, 0, 0, gameControl.canvas.width, gameControl.canvas.height);     
-        // updateKeys();  
-        updateKeysV2(music2);
+        updateKeys();  
+        // updateKeysV2(music2);
        
     }
 
@@ -78,8 +85,6 @@ window.onload = function () {
         gameControl.startMusic();
         drawGuitar();
         updateBoard();
-        // this.interval = setInterval(updateBoard, 1000/60);
-
     }
 
     function clearBoard() {
@@ -98,6 +103,7 @@ window.onload = function () {
                 keys[i].drawKey();
                 if(keys[i].posY > keyZone.yFinal){
                     keys.splice(i,1); //remove a chave do array se ja passou da keyZone
+                    gameControl.score -= 8;
                     gameControl.playMissedNote();
                 } 
             }
@@ -105,10 +111,8 @@ window.onload = function () {
        
     }
     function updateKeysV2(music){
-    
         music.frames += 1;
         if(music.frames % 25 === 0){
-            console.log(new Date());
             let noteArray = music.musicArray[music.pos];
             noteArray.forEach((note,index) => {
                 if(note){
@@ -151,6 +155,7 @@ window.onload = function () {
         clearBoard();
         drawGuitar();
         drawFlames();
+        drawScore();
         requestAnimationFrame(updateBoard) ;
         
 
@@ -170,8 +175,14 @@ window.onload = function () {
                 keyFiltered.forEach((key) => {
                     key.dead = true;
                     flames.push(new Flame(gameControl.ctx,buttonPos[key.buttonPos].x,buttonPos[key.buttonPos].y));
+                    gameControl.music.volume = 1;
+                    gameControl.score += 8;
+                    setTimeout( function () {  
+                        gameControl.music.volume = 0.7;
+                    },500);
                 })
             }else{
+                gameControl.score -= 8;
                 gameControl.playMissedNote();
             }
         }

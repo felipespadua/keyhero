@@ -2,13 +2,26 @@ body {
     padding: 0;
     text-align: center;
   }
-  
+  @font-face {
+    font-family:"Nightmare-Hero";
+    src: url("../fonts/Nightmare_Hero_Normal.ttf") format("truetype");
+  }
+  body{
+    margin: 0;
+    padding: 0;
+    background-image: url("../img/background-slash.jpg");
+    background-repeat: no-repeat;
+    background-size:cover;
+  }
   .game-intro {
-    position: fixed;
+    position: relative;
     z-index: 1;
-    float: middle;
-    padding: 0% 10%;
-    left: calc(50% - 350px);
+    margin: 150px ;
+    float: left;
+    left: 0;
+    /* float: middle; */
+    /* padding: 0% 10%; */
+    /* left: calc(50% - 350px); */
   }
   
   .game-intro p {
@@ -27,16 +40,36 @@ body {
   }
   
   body button {
-    font-size: 30px;
-    background-color: #870007;
-    color: #fff;
-    padding: 20px 40px;
-    border: 0;
-    box-shadow: 0;
-    border-radius: 5px;
-    margin-bottom: 20px;
+    /* /* font-size: 30px; */
+    /* background-color: #870007; */
+    /* color: #fff; */
+    /* padding: 20px 40px; */
+    /* border: 0; */
+    /* box-shadow: 0; */
+    /* border-radius: 5px; */
+    /* border: 0; */
+    padding: 0;
+    border: none;
+    font: inherit;
+    color: inherit;
+    background-color: transparent;
+    /* show a hand cursor on hover; some argue that we
+    should keep the default arrow cursor for buttons */
+    cursor: pointer;
+    margin-bottom: 20px; 
+    margin-left: 0;
+    font-family: 'Nightmare-Hero';
+    color: white;
+    font-size: 50px;
+    text-shadow: 0 0 10px;
+    align-self: flex-start;
   }
-  
+  body button:hover{
+    color: red;
+  }
+  #selectList:hover{
+    color:red;
+  }
   #game-board {
     position: absolute;
     float: middle;
@@ -53,6 +86,7 @@ body {
     bottom: 0;
     min-width: 100%;
     min-height: 100%;
+    display: none;
   }
   audio{
       visibility: hidden;
@@ -60,15 +94,36 @@ body {
   .container{
     display: flex;
     flex-direction: column;
+    justify-content: flex-end;
+    align-content: flex-start;
   }
   #selectList{
-    height: 50px
+    /* height: 50px; */
+      border: 0;
+      
+      background-image: none;
+      -webkit-appearance: none;
+      text-align: center;
+      padding: 0;
+      border: none;
+      font: inherit;
+      color: inherit;
+      background-color: transparent;
+    cursor: pointer;
+    margin-bottom: 20px; 
+    font-family: 'Nightmare-Hero';
+    color: white;
+    font-size: 50px;
+    text-shadow: 0 0 15px;
   }
   #select-alert{
     display: none;
+    /* visibility: */
   }
   #game-title{
-    font-family: 'Monoton', cursive;
+    font-family: 'Nightmare-Hero';
     color: white;
-    font-size: 100px;
+    font-size: 190px;
+    text-shadow: 0 0 20px;
+    
   }
