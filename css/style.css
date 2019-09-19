@@ -54,6 +54,21 @@ body {
     min-width: 100%;
     min-height: 100%;
   }
-  #missed-note{
+  audio{
       visibility: hidden;
+  }
+  .container{
+    display: flex;
+    flex-direction: column;
+  }
+  #selectList{
+    height: 50px
+  }
+  #select-alert{
+    display: none;
+  }
+  #game-title{
+    font-family: 'Monoton', cursive;
+    color: white;
+    font-size: 100px;
   }

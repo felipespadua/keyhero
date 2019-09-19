@@ -1,23 +1,44 @@
 window.onload = function () {
-    document.getElementById("start-button").onclick = function () {
-        document.getElementById("start-button").style.visibility = "hidden";
-        document.getElementById("logo-image").style.display = "none";
-        document.getElementById("game-intro").style.display = "none";
-        startGame();
-    };
     var gameControl = {
         canvas: document.createElement("canvas"),
         frames: 0,
         framesFlame: 0,
         missedNote: document.getElementById("missed-note"),
+        selectList: document.getElementById("selectList"),
+        music:  document.getElementById("main-music"),
+        started: false,
+        checkMusicSelected: function(){
+            return document.getElementById("selectList").value != 0;
+        },
+        setMusic: function () {
+            switch(selectList.value){
+                case "1":
+                    this.music.src = "./music/kiss-rockandrollallnight.mp3";
+                    break;
+                case "2": 
+                    this.music.src = "./music/poison-talkdirtytome.mp3";
+                    break;
+                default:
+                    this.music.src = "";
+            }
+           
+        },
         start: function () {
+            this.started = true;
             this.canvas.width = 700;
             this.canvas.height = 750;
             this.ctx = this.canvas.getContext("2d");
             document.getElementById("game-board").appendChild(this.canvas);
         },
         playMissedNote: function (){
+            let random = Math.floor(Math.random() * 2 ) + 1;
+            this.missedNote.src = `./music/missed-note-half${random}.mp3`;
             this.missedNote.play();        
+        },
+        startMusic: function (){    
+            this.setMusic();
+            console.log(this.music);
+            this.music.play();
         }
 
     };
@@ -25,19 +46,36 @@ window.onload = function () {
     let flames = [];
     const keysPos = [{x: 245, y: 50},{x: 295, y: 50}, {x:340, y:50},{x:385, y: 50},{x:435, y:50}];
     const buttonPos = [{ x: 22, y: 530}, {x: 156,y: 530}, {x:290, y:530}, { x:420, y:530}, {x:553, y:530}];
-    const patterns = [{ x: -0.65, y: 2},{x:-0.37, y:2},{x:-0.07, y:2},{x:0.24, y:2},{x:0.54, y:2}];
+    const patterns = [{ x: -1, y: 3},{x:-0.55, y:3},{x:-0.12, y:3},{x:0.24, y:2},{x:0.54, y:2}];
     const imgGuitar = new Image();
     const keyZone = { yInicio: 590, yFinal: 680};    
+
+    document.getElementById("start-button").onclick = function () {
+        if(gameControl.checkMusicSelected()){
+            startGame();
+            document.getElementById("start-button").style.visibility = "hidden";
+            document.getElementById("logo-image").style.display = "none";
+            document.getElementById("game-intro").style.display = "none";
+        }else{
+            document.getElementById("select-alert").style.display = "block";
+        }
+       
+       
+    };
+    
+ 
     
     function drawGuitar() {
         imgGuitar.src = "./img/guitar3.png";
-        gameControl.ctx.drawImage(imgGuitar, 0, 0, gameControl.canvas.width, gameControl.canvas.height);       
-        updateKeys();
+        gameControl.ctx.drawImage(imgGuitar, 0, 0, gameControl.canvas.width, gameControl.canvas.height);     
+        // updateKeys();  
+        updateKeysV2(music2);
        
     }
 
     function startGame() {
         gameControl.start();
+        gameControl.startMusic();
         drawGuitar();
         updateBoard();
         // this.interval = setInterval(updateBoard, 1000/60);
@@ -65,6 +103,32 @@ window.onload = function () {
             }
         }
        
+    }
+    function updateKeysV2(music){
+    
+        music.frames += 1;
+        if(music.frames % 25 === 0){
+            console.log(new Date());
+            let noteArray = music.musicArray[music.pos];
+            noteArray.forEach((note,index) => {
+                if(note){
+                    let randomKeyIndex =  Math.floor(Math.random() * 26 );
+                    keys.push(keysFactory(keysPos[index].x,keysPos[index].y,randomKeyIndex,patterns[index],index));
+                }
+            })
+           
+            music.pos += 1;
+        }
+        if(keys.length > 0){
+            for (let i = 0; i < keys.length ; i+=1) {
+                keys[i].moveKey();
+                keys[i].drawKey();
+                if(keys[i].posY > keyZone.yFinal){
+                    keys.splice(i,1); //remove a chave do array se ja passou da keyZone
+                    gameControl.playMissedNote();
+                } 
+            }
+        }
     }
 
 
@@ -99,15 +163,17 @@ window.onload = function () {
     }
 
     window.onkeydown = function (e){
-        let stringKeyCode = String.fromCharCode(e.keyCode);
-        let keyFiltered = keyOnKeyZone(stringKeyCode);
-        if(keyFiltered.length > 0){
-            keyFiltered.forEach((key) => {
-                key.dead = true;
-                flames.push(new Flame(gameControl.ctx,buttonPos[key.buttonPos].x,buttonPos[key.buttonPos].y));
-            })
-        }else{
-            gameControl.playMissedNote();
+        if(gameControl.started){
+            let stringKeyCode = String.fromCharCode(e.keyCode);
+            let keyFiltered = keyOnKeyZone(stringKeyCode);
+            if(keyFiltered.length > 0){
+                keyFiltered.forEach((key) => {
+                    key.dead = true;
+                    flames.push(new Flame(gameControl.ctx,buttonPos[key.buttonPos].x,buttonPos[key.buttonPos].y));
+                })
+            }else{
+                gameControl.playMissedNote();
+            }
         }
     }
 

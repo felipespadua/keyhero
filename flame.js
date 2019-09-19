@@ -24,8 +24,6 @@ class Flame{
     update() {
         this.curFrame += this.updateFrameSpeed; // Isso serve pra 'retardar' o update nos frames do this
         this.srcX = (Math.floor(this.curFrame) % 6) * this.frameWidth;
-        
-        
     }
     draw(){
         this.lifeCycle += 1;
