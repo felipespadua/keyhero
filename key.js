@@ -16,7 +16,10 @@ class Key {
         this.dead = false;
     }
     drawKey(){
-        this.dead ? this.img.src = "" : false;
+        if(this.dead){
+            this.img.src = "";
+        }
+        // this.dead ? this.img.src = "" : false;
         this.ctx.drawImage(this.img, this.posX, this.posY, this.width, this.height);
     }
     fireKey(){
