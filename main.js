@@ -75,7 +75,7 @@ window.onload = function () {
         gameControl.ctx.font = "30px Nightmare-Hero";
         gameControl.ctx.fillStyle = "white";
         gameControl.ctx.fillText(`Score: ${gameControl.score}`, 540,170);
-        // gameControl.ctx.fillText(`${gameControl.percentageScore()}%`, 540,190);
+       
     } 
     
     function drawGuitar() {
