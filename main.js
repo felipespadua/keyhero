@@ -8,6 +8,11 @@ window.onload = function () {
         music:  document.getElementById("main-music"),
         started: false,
         score: 0,
+        countKeys: 0,
+        errorsKeys: 0,
+        percentageScore: function(){
+            return  100 * (this.errorsKeys / this.countKeys);
+        },
         checkMusicSelected: function(){
             return document.getElementById("selectList").value != 0;
         },
@@ -70,6 +75,7 @@ window.onload = function () {
         gameControl.ctx.font = "30px Nightmare-Hero";
         gameControl.ctx.fillStyle = "white";
         gameControl.ctx.fillText(`Score: ${gameControl.score}`, 540,170);
+        // gameControl.ctx.fillText(`${gameControl.percentageScore()}%`, 540,190);
     } 
     
     function drawGuitar() {
@@ -95,6 +101,7 @@ window.onload = function () {
         if (gameControl.frames % 60 === 0) {
             let randomPos = Math.floor(Math.random() * keysPos.length);
             let randomKeyIndex =  Math.floor(Math.random() * 26 );
+            gameControl.countKeys += 1;
             keys.push(keysFactory(keysPos[randomPos].x,keysPos[randomPos].y,randomKeyIndex,patterns[randomPos],randomPos));
         }
         if(keys.length > 0){
@@ -117,6 +124,7 @@ window.onload = function () {
             noteArray.forEach((note,index) => {
                 if(note){
                     let randomKeyIndex =  Math.floor(Math.random() * 26 );
+                    gameControl.countKeys += 1;
                     keys.push(keysFactory(keysPos[index].x,keysPos[index].y,randomKeyIndex,patterns[index],index));
                 }
             })
@@ -182,6 +190,7 @@ window.onload = function () {
                     },500);
                 })
             }else{
+                gameControl.errorsKeys +=1;
                 gameControl.score -= 8;
                 gameControl.playMissedNote();
             }
