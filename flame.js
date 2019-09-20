@@ -7,7 +7,7 @@ class Flame{
         this.imgWidth = 3728 ; // Largura da sprite
         this.imgHeight = 912; // Altura da sprite
         // this.cols = 5; // Numero de sprites na horizontal
-        this.rows = 3; // Numero de linhas na sprite
+        // this.rows = 3; // Numero de linhas na sprite
         this.frameWidth = 615; // Largura de cada "bloco" da sprite
         this.frameHeight = 784  ; // Altura de cada "bloco" da sprite
         this.curFrame = 0; // Frame atual
